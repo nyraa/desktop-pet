@@ -1,3 +1,5 @@
+package desktoppet;
+
 import javax.swing.JComponent;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -51,7 +53,7 @@ public abstract class Animal extends JComponent
     }
 
     // abstract method
-    abstract void update(State state);
+    abstract public void update(State state);
     @Override
     public abstract void paintComponent(Graphics g);
 }
