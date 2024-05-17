@@ -2,7 +2,6 @@ package desktoppet;
 
 import java.awt.*;
 import javax.swing.*;
-import java.awt.event.*;
 
 public class Window extends JFrame
 {
@@ -21,13 +20,7 @@ public class Window extends JFrame
 
         // set window to always on top
         setAlwaysOnTop(true);
-    }
 
-    @Override
-    public void paint(Graphics g)
-    {
-        super.paint(g);
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, getWidth(), getHeight());
+        setLayout(null);
     }
 }
