@@ -1,6 +1,9 @@
-package desktoppet;
+package desktoppet.model;
 
 import javax.swing.JComponent;
+
+import desktoppet.control.State;
+
 import java.awt.Graphics;
 
 public abstract class Animal extends JComponent

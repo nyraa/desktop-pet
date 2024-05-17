@@ -1,6 +1,8 @@
 package desktoppet.animals;
 
-import desktoppet.*;
+import desktoppet.control.State;
+import desktoppet.model.Animal;
+
 import java.awt.Graphics;
 
 public class Test extends Animal

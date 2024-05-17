@@ -1,8 +1,9 @@
-package desktoppet;
+package desktoppet.main;
 
 import desktoppet.animals.Test;
+import desktoppet.ui.Window;
 
-public class Pet
+public class DesktopPet
 {
     public static void main(String[] args)
     {

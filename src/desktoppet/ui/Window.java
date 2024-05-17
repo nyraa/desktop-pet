@@ -1,4 +1,4 @@
-package desktoppet;
+package desktoppet.ui;
 
 import java.awt.*;
 import javax.swing.*;
