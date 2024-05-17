@@ -1,6 +1,7 @@
 package desktoppet.animals;
 
 import desktoppet.*;
+import java.awt.Graphics;
 
 public class Test extends Animal
 {
