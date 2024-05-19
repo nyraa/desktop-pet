@@ -13,15 +13,18 @@ import desktoppet.model.Animal;
 public class Window extends JFrame
 {
     Timer timer = new Timer();
-    desktoppet.control.State state = new desktoppet.control.State();
+    State state = new desktoppet.control.State();
+    
     TimerTask task = new TimerTask() {
         @Override
         public void run() {
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            state.setScreenSize(screenSize.width, screenSize.height);
             // update the window
             Container contentPane = getContentPane();
             Component[] components = contentPane.getComponents();
             for (Component component : components) {
-                desktoppet.model.Animal animal = (desktoppet.model.Animal)component;
+                Animal animal = (Animal)component;
                 animal.update(state);
             }
         }

@@ -4,8 +4,6 @@ import desktoppet.control.State;
 import desktoppet.model.Animal;
 
 import java.awt.Graphics;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 
 public class Test extends Animal
 {
@@ -20,8 +18,7 @@ public class Test extends Animal
     public void update(State state)
     {
         //chaeck if the circle is out of the screen
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        if (getX() > screenSize.width-this.getWidth() || getX() < 0)
+        if (getX() > (state.getScreenWidht() - this.getWidth()) || getX() < 0)
         {
             controlDirection *= -1;
         }
