@@ -6,6 +6,7 @@ import desktoppet.control.State;
 
 import java.awt.Graphics;
 
+
 public abstract class Animal extends JComponent
 {
     public Animal()
