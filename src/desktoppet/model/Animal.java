@@ -1,15 +1,15 @@
 package desktoppet.model;
 
-import javax.swing.JComponent;
+import javax.swing.JLabel;
 
 import desktoppet.control.State;
 
 import java.awt.Graphics;
 
 
-public abstract class Animal extends JComponent
+public abstract class Animal extends JLabel
 {
-    public Animal()
+    private Animal()
     {
         super();
     }
