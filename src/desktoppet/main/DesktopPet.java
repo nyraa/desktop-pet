@@ -1,6 +1,8 @@
 package desktoppet.main;
 
 import desktoppet.animals.Test;
+import desktoppet.animals.Cat;
+
 import desktoppet.model.Animal;
 import desktoppet.ui.Window;
 
@@ -19,14 +21,17 @@ public class DesktopPet
     public static void setAnimal(Window window, String animalType, int x, int y, int width, int height)
     {
         Animal animal = null;
+        Animal test  = null;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         y = screenSize.height - height;
         if(animalType.equals("cat"))
         {
-            animal = new Test(x, y, width, height);
+            test = new Test(x, y, width, height);
+            animal = new Cat(x, y, width, height);
         }
         
         window.add(animal);
+        window.add(test);
     }
     
 }
