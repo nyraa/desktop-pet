@@ -13,7 +13,7 @@ import desktoppet.model.Animal;
 public class Window extends JFrame
 {
     Timer timer = new Timer();
-    desktoppet.control.State state = new desktoppet.control.State();
+    desktoppet.control.State state = new desktoppet.control.State(this);
     TimerTask task = new TimerTask() {
         @Override
         public void run() {
@@ -22,6 +22,8 @@ public class Window extends JFrame
             Component[] components = contentPane.getComponents();
             for (Component component : components) {
                 desktoppet.model.Animal animal = (desktoppet.model.Animal)component;
+                //print animal name
+                // System.out.println(animal.getClass().getName());
                 animal.update(state);
             }
         }
@@ -50,5 +52,10 @@ public class Window extends JFrame
         timer.scheduleAtFixedRate(task, 0, 1000/60);
     }
 
+    public void deleteAnimal(Animal animal)
+    {
+        this.remove(animal);
+        animal = null;
+    }
 
 }

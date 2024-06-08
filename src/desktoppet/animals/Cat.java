@@ -2,6 +2,8 @@ package desktoppet.animals;
 
 import desktoppet.control.State;
 import desktoppet.model.Animal;
+import desktoppet.ui.Window;
+import desktoppet.animals.ClawMark;
 
 import java.awt.MouseInfo;
 import java.awt.Graphics;
@@ -11,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.awt.Image;
 import javax.imageio.ImageIO;
 import java.io.File;
+import java.util.Date;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -23,30 +26,36 @@ public class Cat extends Animal
     double directionX = 1;
     double directionY = -1;
     static final double changeThreshold = 0.995;
+    static final double clawThreshold = 0.998;
     static final int speed = 1;
-
-    String right_walk = "/images/right_150.gif";
-    String left_walk = "/images/left_150.gif";
 
     ImageIcon walk_right = null;
     ImageIcon walk_left = null;
     ImageIcon play_left = null;
     ImageIcon play_right = null;
+    ImageIcon scratch_gif = null;
+    ImageIcon scratch_static = null;
+    ClawMark mark = null;
+    Window window = null;
 
     public Cat(int x, int y, int width, int height)
     {
         super(x, y, width, height);
         System.out.println("Cat created");
         try{
-            //read image and resize
+            //read in image and resize
             walk_right = new ImageIcon(getClass().getResource("/images/right_150.gif"));
-            walk_right.setImage(walk_right.getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
+            walk_right.setImage(walk_right.getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT)); //resize the image
             walk_left = new ImageIcon(getClass().getResource("/images/left_150.gif"));
             walk_left.setImage(walk_left.getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
             play_left = new ImageIcon(getClass().getResource("/images/left_play_.gif"));
             play_left.setImage(play_left.getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
             play_right = new ImageIcon(getClass().getResource("/images/right_play_.gif"));
             play_right.setImage(play_right.getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
+            scratch_gif = new ImageIcon(getClass().getResource("/images/scratch.gif"));
+            scratch_gif.setImage(scratch_gif.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT)); 
+            scratch_static = new ImageIcon(getClass().getResource("/images/scratch.png"));
+            scratch_static.setImage(scratch_static.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT));
 
             this.setIcon(walk_right);
         }catch(Exception e){
@@ -54,11 +63,30 @@ public class Cat extends Animal
         }
     }
 
+    
+
     @Override
     public void update(State state)
     {
-        //chaeck if the circle is out of the screen
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        //scratching control
+        if(mark != null){
+            Date now = new Date();
+            //set animation of scratching cat
+            if(now.getTime() - mark.createTime <= 4200){
+                this.setIcon(scratch_gif);
+                return;
+            }
+
+            //determine if the claw should be deleted
+            if((now.getTime() - mark.createTime) >= mark.existTime * 1000){
+                state.window.deleteAnimal(mark);
+                mark.createTime = 0;
+                mark = null;
+                System.out.println("Claw deleted");
+            }
+        }
 
         //check if the mouse is on the cat
         int mouseX = MouseInfo.getPointerInfo().getLocation().x;
@@ -66,7 +94,7 @@ public class Cat extends Animal
         if(mouseX>getX() && mouseX<getX()+getWidth()/2 && mouseY>getY() && mouseY<getY()+getHeight() && this.getIcon() != play_right){
             this.setIcon(play_left);
             return;
-        }else if(mouseX>getX()+getWidth()/2 && mouseX<getX()+getWidth() && mouseY>getY() && mouseY<getY()+getHeight()  && this.getIcon() != play_left){
+        }else if(mouseX > getX() + getWidth()/2 && mouseX < getX() + getWidth() && mouseY > getY() && mouseY < getY() + getHeight()  && this.getIcon() != play_left){
             this.setIcon(play_right);
             return;
         }else{
@@ -75,6 +103,16 @@ public class Cat extends Animal
 
         //randomly change the direction
         double probability = Math.random();
+
+        //randomly scratch the screen
+        if(probability >= clawThreshold){
+            this.setIcon(scratch_gif);
+            if(mark == null){
+                mark = new ClawMark(getX(), getY(), 100, 100, 8); //width, height, existTime
+            }
+            return;
+        }
+
         if(probability >= changeThreshold){
             double randX = Math.random();
             double randY = Math.random();
@@ -84,7 +122,9 @@ public class Cat extends Animal
             System.out.println("Direction changed: "+directionX+" "+directionY);
         }
 
-        //check if the circle hits the edge
+        
+
+        //check if the cat hits the edge
         if(getX() > screenSize.width-this.getWidth() || getX() < 0 || getY() > screenSize.height-this.getHeight() || getY() < 0){
             directionX = -directionX;
             directionY = -directionY;

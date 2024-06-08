@@ -31,7 +31,6 @@ public class DesktopPet
         }
         
         window.add(animal);
-        window.add(test);
     }
     
 }
