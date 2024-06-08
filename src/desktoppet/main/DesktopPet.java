@@ -2,6 +2,7 @@ package desktoppet.main;
 
 import desktoppet.animals.Test;
 import desktoppet.animals.Cat;
+import desktoppet.animals.Mouse;
 
 import desktoppet.model.Animal;
 import desktoppet.ui.Window;
@@ -15,6 +16,7 @@ public class DesktopPet
     {
         Window window = new Window();
         setAnimal(window, "cat", 0, 0, 100, 100);
+        setAnimal(window, "mouse", 0, 0, 100, 100);
         window.setVisible(true);
     }
 
@@ -28,6 +30,11 @@ public class DesktopPet
         {
             test = new Test(x, y, width, height);
             animal = new Cat(x, y, width, height);
+        }
+        else if(animalType.equals("mouse"))
+        {
+            //test = new Test(x, y, width, height);
+            animal = new Mouse(x, y, width, height);
         }
         
         window.add(animal);
