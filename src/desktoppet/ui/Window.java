@@ -41,6 +41,11 @@ public class Window extends JFrame
                 SettingsWindow settingsWindow = new SettingsWindow(worldRef);
                 settingsWindow.setVisible(true);
             }
+            @Override
+            public void windowIconified(WindowEvent e)
+            {
+                setExtendedState(JFrame.MAXIMIZED_BOTH);
+            }
         });
     }
 }
