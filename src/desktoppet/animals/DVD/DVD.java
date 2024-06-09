@@ -26,7 +26,12 @@ public class DVD extends Animal
         super(x, y, width, height);
         try
         {
-            DVDIcon = ImageIO.read(getClass().getResource("DVD.png"));
+            BufferedImage tmpDVDIcon = ImageIO.read(getClass().getResource("DVD.png"));
+            // resize DVDIcon to width and height
+            DVDIcon = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g = DVDIcon.createGraphics();
+            g.drawImage(tmpDVDIcon, 0, 0, width, height, null);
+            g.dispose();
         }
         catch(Exception e)
         {
