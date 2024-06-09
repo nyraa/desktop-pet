@@ -2,8 +2,6 @@ package desktoppet.control;
 
 import java.awt.*;
 
-import java.awt.*;
-
 public class State
 {
     private int mouseX;
