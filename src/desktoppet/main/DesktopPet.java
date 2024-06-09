@@ -2,7 +2,6 @@ package desktoppet.main;
 
 import desktoppet.animals.Cat.Cat;
 import desktoppet.control.World;
-import desktoppet.control.loader.AnimalLoader;
 
 
 public class DesktopPet
