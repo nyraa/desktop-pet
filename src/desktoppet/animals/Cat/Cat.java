@@ -12,11 +12,21 @@ import javax.swing.*;
 
 public class Cat extends Animal
 {
+    private enum ActionState
+    {
+        WALK_RIGHT,
+        WALK_LEFT,
+        PLAY_RIGHT,
+        PLAY_LEFT,
+        SCRATCH
+    };
+    ActionState actionState = ActionState.WALK_RIGHT;
     double directionX = 1;
     double directionY = -1;
     static final double changeThreshold = 0.995;
     static final double clawThreshold = 0.998;
     static final int speed = 1;
+    private long scratchStartTime = 0;
 
     ImageIcon walk_right = null;
     ImageIcon walk_left = null;
@@ -24,7 +34,6 @@ public class Cat extends Animal
     ImageIcon play_right = null;
     ImageIcon scratch_gif = null;
     ImageIcon scratch_static = null;
-    ClawMark mark = null;
     Window window = null;
 
     public Cat(int x, int y, int width, int height)
@@ -57,38 +66,55 @@ public class Cat extends Animal
     @Override
     public void update(State state)
     {
-        int screenWidth = state.getScreenWidth();
-        int screenHeight = state.getScreenHeight();
-
-        //scratching control
-        if(mark != null){
-            Date now = new Date();
-            //set animation of scratching cat
-            if(now.getTime() - mark.createTime <= 4200){
-                this.setIcon(scratch_gif);
+        // stall the cat for a while after scratching
+        if(actionState == ActionState.SCRATCH)
+        {
+            if(System.currentTimeMillis() - scratchStartTime < 4000)
+            {
                 return;
             }
-
-            //determine if the claw should be deleted
-            if((now.getTime() - mark.createTime) >= mark.existTime * 1000){
-                state.getWorldRef().deleteAnimal(mark);
-                mark.createTime = 0;
-                mark = null;
-                System.out.println("Claw deleted");
+            else
+            {
+                if(directionX > 0)
+                {
+                    actionState = ActionState.WALK_RIGHT;
+                    this.setIcon(walk_right);
+                }
+                else
+                {
+                    actionState = ActionState.WALK_LEFT;
+                    this.setIcon(walk_left);
+                }
             }
         }
+        int screenWidth = state.getScreenWidth();
+        int screenHeight = state.getScreenHeight();
 
         //check if the mouse is on the cat
         int mouseX = state.getMouseX();
         int mouseY = state.getMouseY();
         if(mouseX>getX() && mouseX<getX()+getWidth()/2 && mouseY>getY() && mouseY<getY()+getHeight() && this.getIcon() != play_right){
+            actionState = ActionState.PLAY_RIGHT;
             this.setIcon(play_left);
             return;
         }else if(mouseX > getX() + getWidth()/2 && mouseX < getX() + getWidth() && mouseY > getY() && mouseY < getY() + getHeight()  && this.getIcon() != play_left){
+            actionState = ActionState.PLAY_LEFT;
             this.setIcon(play_right);
             return;
         }else{
-            this.setIcon(directionX>0?walk_right:walk_left);
+            if(actionState != ActionState.WALK_LEFT && actionState != ActionState.WALK_RIGHT)
+            {
+                if(directionX > 0)
+                {
+                    actionState = ActionState.WALK_RIGHT;
+                    this.setIcon(walk_right);
+                }
+                else
+                {
+                    actionState = ActionState.WALK_LEFT;
+                    this.setIcon(walk_left);
+                }
+            }
         }
 
         //randomly change the direction
@@ -96,10 +122,12 @@ public class Cat extends Animal
 
         //randomly scratch the screen
         if(probability >= clawThreshold){
+            actionState = ActionState.SCRATCH;
+            System.out.println("Scratching");
+            scratchStartTime = System.currentTimeMillis();
             this.setIcon(scratch_gif);
-            if(mark == null){
-                mark = new ClawMark(getX(), getY(), 100, 100, 8); //width, height, existTime
-            }
+            ClawMark mark = new ClawMark(getX(), getY(), 100, 100, 8); //width, height, existTime
+            state.getWorldRef().addAnimal(mark);
             return;
         }
 
@@ -108,7 +136,16 @@ public class Cat extends Animal
             double randY = Math.random();
             directionX = (randX / Math.sqrt(randX*randX + randY*randY))*2;
             directionY = (randY / Math.sqrt(randX*randX + randY*randY))*2;
-            this.setIcon(directionX>0?walk_right:walk_left);
+            if(directionX > 0)
+            {
+                actionState = ActionState.WALK_RIGHT;
+                this.setIcon(walk_right);
+            }
+            else
+            {
+                actionState = ActionState.WALK_LEFT;
+                this.setIcon(walk_left);
+            }
             System.out.println("Direction changed: "+directionX+" "+directionY);
         }
 
@@ -118,7 +155,16 @@ public class Cat extends Animal
         if(getX() > screenWidth-this.getWidth() || getX() < 0 || getY() > screenHeight-this.getHeight() || getY() < 0){
             directionX = -directionX;
             directionY = -directionY;
-            this.setIcon(directionX>0?walk_right:walk_left);
+            if(directionX > 0)
+            {
+                actionState = ActionState.WALK_RIGHT;
+                this.setIcon(walk_right);
+            }
+            else
+            {
+                actionState = ActionState.WALK_LEFT;
+                this.setIcon(walk_left);
+            }
             System.out.println("hit edge, Direction changed: "+directionX+" "+directionY);
         }
 
