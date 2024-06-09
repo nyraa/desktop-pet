@@ -1,25 +1,14 @@
-package desktoppet.animals;
+package desktoppet.animals.Cat;
 
 import desktoppet.control.State;
 import desktoppet.model.Animal;
 import desktoppet.ui.Window;
-import desktoppet.animals.ClawMark;
 
-import java.awt.MouseInfo;
 import java.awt.Graphics;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
 import java.awt.Image;
-import javax.imageio.ImageIO;
-import java.io.File;
 import java.util.Date;
 
 import javax.swing.*;
-import javax.swing.event.*;
-import java.net.*;
-
-import java.lang.*;
 
 public class Cat extends Animal
 {
@@ -44,17 +33,17 @@ public class Cat extends Animal
         System.out.println("Cat created");
         try{
             //read in image and resize
-            walk_right = new ImageIcon(getClass().getResource("/images/right_150.gif"));
+            walk_right = new ImageIcon(getClass().getResource("right_150.gif"));
             walk_right.setImage(walk_right.getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT)); //resize the image
-            walk_left = new ImageIcon(getClass().getResource("/images/left_150.gif"));
+            walk_left = new ImageIcon(getClass().getResource("left_150.gif"));
             walk_left.setImage(walk_left.getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
-            play_left = new ImageIcon(getClass().getResource("/images/left_play_.gif"));
+            play_left = new ImageIcon(getClass().getResource("left_play_.gif"));
             play_left.setImage(play_left.getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
-            play_right = new ImageIcon(getClass().getResource("/images/right_play_.gif"));
+            play_right = new ImageIcon(getClass().getResource("right_play_.gif"));
             play_right.setImage(play_right.getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
-            scratch_gif = new ImageIcon(getClass().getResource("/images/scratch.gif"));
+            scratch_gif = new ImageIcon(getClass().getResource("scratch.gif"));
             scratch_gif.setImage(scratch_gif.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT)); 
-            scratch_static = new ImageIcon(getClass().getResource("/images/scratch.png"));
+            scratch_static = new ImageIcon(getClass().getResource("scratch.png"));
             scratch_static.setImage(scratch_static.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT));
 
             this.setIcon(walk_right);
@@ -68,7 +57,8 @@ public class Cat extends Animal
     @Override
     public void update(State state)
     {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = state.getScreenWidth();
+        int screenHeight = state.getScreenHeight();
 
         //scratching control
         if(mark != null){
@@ -81,7 +71,7 @@ public class Cat extends Animal
 
             //determine if the claw should be deleted
             if((now.getTime() - mark.createTime) >= mark.existTime * 1000){
-                state.window.deleteAnimal(mark);
+                state.getWorldRef().deleteAnimal(mark);
                 mark.createTime = 0;
                 mark = null;
                 System.out.println("Claw deleted");
@@ -89,8 +79,8 @@ public class Cat extends Animal
         }
 
         //check if the mouse is on the cat
-        int mouseX = MouseInfo.getPointerInfo().getLocation().x;
-        int mouseY = MouseInfo.getPointerInfo().getLocation().y;
+        int mouseX = state.getMouseX();
+        int mouseY = state.getMouseY();
         if(mouseX>getX() && mouseX<getX()+getWidth()/2 && mouseY>getY() && mouseY<getY()+getHeight() && this.getIcon() != play_right){
             this.setIcon(play_left);
             return;
@@ -125,7 +115,7 @@ public class Cat extends Animal
         
 
         //check if the cat hits the edge
-        if(getX() > screenSize.width-this.getWidth() || getX() < 0 || getY() > screenSize.height-this.getHeight() || getY() < 0){
+        if(getX() > screenWidth-this.getWidth() || getX() < 0 || getY() > screenHeight-this.getHeight() || getY() < 0){
             directionX = -directionX;
             directionY = -directionY;
             this.setIcon(directionX>0?walk_right:walk_left);
