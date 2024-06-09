@@ -76,10 +76,10 @@ public class DVD extends Animal
     {
         // draw icon with color
         tmpG.setComposite(java.awt.AlphaComposite.SrcOver);
-        tmpG.drawImage(DVDIcon, 0, 0, width, height, null);
+        tmpG.drawImage(DVDIcon, 0, 0, null);
         tmpG.setColor(color);
         tmpG.setComposite(java.awt.AlphaComposite.SrcIn);
         tmpG.fillRect(0, 0, width, height);
-        g.drawImage(tmpImage, 0, 0, width, height, null);
+        g.drawImage(tmpImage, 0, 0, null);
     }
 }
