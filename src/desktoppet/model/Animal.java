@@ -3,7 +3,6 @@ package desktoppet.model;
 import javax.swing.JLabel;
 
 import desktoppet.control.State;
-import javax.swing.*;
 import java.awt.Graphics;
 
 
