@@ -33,17 +33,17 @@ public class Cat extends Animal
         System.out.println("Cat created");
         try{
             //read in image and resize
-            walk_right = new ImageIcon(getClass().getResource("right_150.gif"));
+            walk_right = new ImageIcon(getClass().getResource("/res/desktoppet/animals/Cat/right_150.gif"));
             walk_right.setImage(walk_right.getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT)); //resize the image
-            walk_left = new ImageIcon(getClass().getResource("left_150.gif"));
+            walk_left = new ImageIcon(getClass().getResource("/res/desktoppet/animals/Cat/left_150.gif"));
             walk_left.setImage(walk_left.getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
-            play_left = new ImageIcon(getClass().getResource("left_play_.gif"));
+            play_left = new ImageIcon(getClass().getResource("/res/desktoppet/animals/Cat/left_play_.gif"));
             play_left.setImage(play_left.getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
-            play_right = new ImageIcon(getClass().getResource("right_play_.gif"));
+            play_right = new ImageIcon(getClass().getResource("/res/desktoppet/animals/Cat/right_play_.gif"));
             play_right.setImage(play_right.getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
-            scratch_gif = new ImageIcon(getClass().getResource("scratch.gif"));
+            scratch_gif = new ImageIcon(getClass().getResource("/res/desktoppet/animals/Cat/scratch.gif"));
             scratch_gif.setImage(scratch_gif.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT)); 
-            scratch_static = new ImageIcon(getClass().getResource("scratch.png"));
+            scratch_static = new ImageIcon(getClass().getResource("/res/desktoppet/animals/Cat/scratch.png"));
             scratch_static.setImage(scratch_static.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT));
 
             this.setIcon(walk_right);
