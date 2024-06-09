@@ -14,13 +14,10 @@ public class Cat extends Animal
 {
     private enum ActionState
     {
-        WALK_RIGHT,
-        WALK_LEFT,
-        PLAY_RIGHT,
-        PLAY_LEFT,
+        WALK,
         SCRATCH
     };
-    ActionState actionState = ActionState.WALK_RIGHT;
+    ActionState actionState = ActionState.WALK;
     double directionX = 1;
     double directionY = -1;
     static final double changeThreshold = 0.995;
@@ -75,16 +72,8 @@ public class Cat extends Animal
             }
             else
             {
-                if(directionX > 0)
-                {
-                    actionState = ActionState.WALK_RIGHT;
-                    this.setIcon(walk_right);
-                }
-                else
-                {
-                    actionState = ActionState.WALK_LEFT;
-                    this.setIcon(walk_left);
-                }
+                actionState = ActionState.WALK;
+                this.setIcon(directionX>0?walk_right:walk_left);
             }
         }
         int screenWidth = state.getScreenWidth();
@@ -94,27 +83,13 @@ public class Cat extends Animal
         int mouseX = state.getMouseX();
         int mouseY = state.getMouseY();
         if(mouseX>getX() && mouseX<getX()+getWidth()/2 && mouseY>getY() && mouseY<getY()+getHeight() && this.getIcon() != play_right){
-            actionState = ActionState.PLAY_RIGHT;
             this.setIcon(play_left);
             return;
         }else if(mouseX > getX() + getWidth()/2 && mouseX < getX() + getWidth() && mouseY > getY() && mouseY < getY() + getHeight()  && this.getIcon() != play_left){
-            actionState = ActionState.PLAY_LEFT;
             this.setIcon(play_right);
             return;
         }else{
-            if(actionState != ActionState.WALK_LEFT && actionState != ActionState.WALK_RIGHT)
-            {
-                if(directionX > 0)
-                {
-                    actionState = ActionState.WALK_RIGHT;
-                    this.setIcon(walk_right);
-                }
-                else
-                {
-                    actionState = ActionState.WALK_LEFT;
-                    this.setIcon(walk_left);
-                }
-            }
+            this.setIcon(directionX>0?walk_right:walk_left);
         }
 
         //randomly change the direction
@@ -136,16 +111,7 @@ public class Cat extends Animal
             double randY = Math.random();
             directionX = (randX / Math.sqrt(randX*randX + randY*randY))*2;
             directionY = (randY / Math.sqrt(randX*randX + randY*randY))*2;
-            if(directionX > 0)
-            {
-                actionState = ActionState.WALK_RIGHT;
-                this.setIcon(walk_right);
-            }
-            else
-            {
-                actionState = ActionState.WALK_LEFT;
-                this.setIcon(walk_left);
-            }
+            this.setIcon(directionX>0?walk_right:walk_left);
             System.out.println("Direction changed: "+directionX+" "+directionY);
         }
 
@@ -155,16 +121,7 @@ public class Cat extends Animal
         if(getX() > screenWidth-this.getWidth() || getX() < 0 || getY() > screenHeight-this.getHeight() || getY() < 0){
             directionX = -directionX;
             directionY = -directionY;
-            if(directionX > 0)
-            {
-                actionState = ActionState.WALK_RIGHT;
-                this.setIcon(walk_right);
-            }
-            else
-            {
-                actionState = ActionState.WALK_LEFT;
-                this.setIcon(walk_left);
-            }
+            this.setIcon(directionX>0?walk_right:walk_left);
             System.out.println("hit edge, Direction changed: "+directionX+" "+directionY);
         }
 
