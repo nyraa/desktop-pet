@@ -1,5 +1,7 @@
 package desktoppet.control;
 
+import java.awt.*;
+
 public class State
 {
     private int mouseX;
@@ -46,5 +48,9 @@ public class State
     public World getWorldRef()
     {
         return this.worldRef;
+    }
+    public Component[] getComponents()
+    {
+        return this.worldRef.getWindow().getContentPane().getComponents();
     }
 }

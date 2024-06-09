@@ -62,4 +62,8 @@ public class World
     {
         window.remove(animal);
     }
+    public Window getWindow()
+    {
+        return window;
+    }
 }
