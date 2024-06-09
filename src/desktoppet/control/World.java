@@ -40,7 +40,7 @@ public class World
     };
     public World()
     {
-        window = new Window();
+        window = new Window(this);
         timer = new Timer();
         state = new State(this);
     }
