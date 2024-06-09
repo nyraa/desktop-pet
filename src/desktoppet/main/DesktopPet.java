@@ -2,7 +2,6 @@ package desktoppet.main;
 
 import desktoppet.animals.DVD.DVD;
 import desktoppet.control.World;
-import desktoppet.ui.Window;
 
 
 public class DesktopPet

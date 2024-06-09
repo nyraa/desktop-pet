@@ -3,12 +3,6 @@ package desktoppet.ui;
 import java.awt.*;
 import javax.swing.*;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
-import desktoppet.control.State;
-import desktoppet.model.Animal;
-
 
 public class Window extends JFrame
 {
