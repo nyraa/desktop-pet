@@ -10,13 +10,7 @@ import java.net.URLClassLoader;
 
 public class AnimalLoader
 {
-    public static void LoadAnimalFromJar(String path, World world) throws Exception
-    {
-        Class<?> loadedClass = LoadJar(path);
-        Method entryMethod = loadedClass.getMethod("entry", World.class);
-        entryMethod.invoke(null, world);
-    }
-    private static Class<?> LoadJar(String path) throws Exception
+    public static Class<?> LoadAnimalFromJar(String path, World world) throws Exception
     {
         JarFile jarFile = new JarFile(path);
         Manifest manifest = jarFile.getManifest();
@@ -28,6 +22,12 @@ public class AnimalLoader
             URLClassLoader classLoader = new URLClassLoader(new URL[] {jarUrl}, AnimalLoader.class.getClassLoader());
 
             Class<?> loadedClass = classLoader.loadClass(mainClass);
+
+            // invoke entry method
+            Method entryMethod = loadedClass.getMethod("entry", World.class);
+            entryMethod.invoke(null, world);
+
+            // close classLoader, after that resources can not be accessed
             classLoader.close();
             return loadedClass;
         }
