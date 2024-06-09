@@ -2,22 +2,39 @@ package desktoppet.animals.DVD;
 
 import javax.swing.ImageIcon;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.awt.Color;
+import javax.imageio.ImageIO;
 
 import desktoppet.model.Animal;
 import desktoppet.control.State;
 
 public class DVD extends Animal
 {
-    private ImageIcon icon;
+    private static final int width = 320;
+    private static final int height = 145;
+    private BufferedImage DVDIcon;
     private final int volacity = 5;
     private int speedX = 5;
     private int speedY = 5;
     private Color color = Color.RED;
+    // image compose
+    private BufferedImage tmpImage;
+    private Graphics2D tmpG;
     public DVD(int x, int y)
     {
-        super(x, y, 320, 145);
-        icon = new ImageIcon(getClass().getResource("DVD.png"));
+        super(x, y, width, height);
+        try
+        {
+            DVDIcon = ImageIO.read(getClass().getResource("DVD.png"));
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        tmpImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        tmpG = tmpImage.createGraphics();
     }
     public void update(State state)
     {
@@ -54,7 +71,11 @@ public class DVD extends Animal
     public void paintContent(Graphics g)
     {
         // draw icon with color
-        g.fillRect(0, 0, this.getWidth(), this.getHeight());
-        g.drawImage(icon.getImage(), 0, 0, this.getWidth(), this.getHeight(), null);
+        tmpG.setComposite(java.awt.AlphaComposite.SrcOver);
+        tmpG.drawImage(DVDIcon, 0, 0, width, height, null);
+        tmpG.setColor(color);
+        tmpG.setComposite(java.awt.AlphaComposite.SrcIn);
+        tmpG.fillRect(0, 0, width, height);
+        g.drawImage(tmpImage, 0, 0, width, height, null);
     }
 }
