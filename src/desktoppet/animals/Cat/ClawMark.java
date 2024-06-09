@@ -13,6 +13,8 @@ public class ClawMark extends Animal
     ImageIcon clawMark_gif = null;
     long createTime = 0;
     int existTime = 0;
+    private boolean deleteFlag = false;
+    private boolean cleanFlag = false;
 
     public ClawMark(int x, int y, int width, int height, int existTime)
     {
@@ -26,20 +28,37 @@ public class ClawMark extends Animal
     }
 
     @Override
-    public void paintContent(Graphics g){}
+    public void paintContent(Graphics g)
+    {
+        if(deleteFlag)
+        {
+            System.out.println("ClawMark graphic cleared");
+            // mark as clean
+            cleanFlag = true;
+        }
+    }
 
     @Override
     public void update(State state){
-        if(System.currentTimeMillis() - createTime > existTime * 1000)
+        if(cleanFlag)
         {
+            state.getWorldRef().deleteAnimal(this);
             System.out.println("ClawMark deleted");
+
+            // escape from this condition for safety
+            cleanFlag = false;
+            return;
+        }
+        if(System.currentTimeMillis() - createTime > existTime * 1000 && !deleteFlag)
+        {
+            System.out.println("ClawMark marked for deletion");
 
             // remove the claw mark safely
             this.setIcon(null);
             this.repaint();
 
-            // delete self
-            state.getWorldRef().deleteAnimal(this);
+            // wait for clean signal
+            this.deleteFlag = true;
         }
     }
 }
