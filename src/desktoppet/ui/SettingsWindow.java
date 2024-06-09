@@ -57,7 +57,7 @@ public class SettingsWindow extends JDialog
                 catch (Exception ex)
                 {
                     ex.printStackTrace();
-                    JOptionPane.showMessageDialog(this, ex.getStackTrace(), "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, ex.getClass().getSimpleName() + ": " + ex.getMessage() + "\nThis is not a valid desktoppet plugin.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
