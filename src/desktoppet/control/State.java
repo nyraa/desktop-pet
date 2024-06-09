@@ -6,12 +6,14 @@ public class State
     private int mouseY;
     private int screenWidth;
     private int screenHeight;
-    public State()
+    private World worldRef;
+    public State(World worldRef)
     {
         this.mouseX = 0;
         this.mouseY = 0;
         this.screenWidth = 0;
         this.screenHeight = 0;
+        this.worldRef = worldRef;
     }
 
     // getter and setter
@@ -40,5 +42,9 @@ public class State
     public int getScreenHeight()
     {
         return this.screenHeight;
+    }
+    public World getWorldRef()
+    {
+        return this.worldRef;
     }
 }
