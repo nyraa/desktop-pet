@@ -1,0 +1,1 @@
+jar cvfe DVD.jar plugin.DVD.DVD -C bin plugin\DVD res\plugin\DVD
