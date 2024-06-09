@@ -33,7 +33,7 @@ public class State
         this.screenWidth = width;
         this.screenHeight = height;
     }
-    public int getScreenWidht()
+    public int getScreenWidth()
     {
         return this.screenWidth;
     }

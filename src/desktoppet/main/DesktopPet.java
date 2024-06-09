@@ -1,6 +1,7 @@
 package desktoppet.main;
 
 import desktoppet.animals.Test;
+import desktoppet.animals.DVD.DVD;
 import desktoppet.model.Animal;
 import desktoppet.ui.Window;
 
@@ -13,6 +14,8 @@ public class DesktopPet
     {
         Window window = new Window();
         setAnimal(window, "cat", 0, 0, 100, 100);
+        DVD dvd = new DVD(0, 0);
+        window.add(dvd);
         window.setVisible(true);
     }
 

@@ -18,7 +18,7 @@ public class Test extends Animal
     public void update(State state)
     {
         //chaeck if the circle is out of the screen
-        if (getX() > (state.getScreenWidht() - this.getWidth()) || getX() < 0)
+        if (getX() > (state.getScreenWidth() - this.getWidth()) || getX() < 0)
         {
             controlDirection *= -1;
         }
