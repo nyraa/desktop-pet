@@ -3,7 +3,6 @@ package desktoppet.animals.Cat;
 import desktoppet.control.State;
 import desktoppet.control.World;
 import desktoppet.model.Animal;
-import desktoppet.ui.Window;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -17,21 +16,20 @@ public class Cat extends Animal
         WALK,
         SCRATCH
     };
-    ActionState actionState = ActionState.WALK;
-    double directionX = 1;
-    double directionY = -1;
-    static final double changeThreshold = 0.995;
-    static final double clawThreshold = 0.998;
-    static final int speed = 1;
+    private ActionState actionState = ActionState.WALK;
+    private double directionX = 1;
+    private double directionY = -1;
+    private static final double changeThreshold = 0.995;
+    private static final double clawThreshold = 0.998;
+    private static final int speed = 1;
     private long scratchStartTime = 0;
 
-    ImageIcon walk_right = null;
-    ImageIcon walk_left = null;
-    ImageIcon play_left = null;
-    ImageIcon play_right = null;
-    ImageIcon scratch_gif = null;
-    ImageIcon scratch_static = null;
-    Window window = null;
+    private ImageIcon walk_right = null;
+    private ImageIcon walk_left = null;
+    private ImageIcon play_left = null;
+    private ImageIcon play_right = null;
+    private ImageIcon scratch_gif = null;
+    private ImageIcon scratch_static = null;
 
     public Cat(int x, int y, int width, int height)
     {
