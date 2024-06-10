@@ -7,7 +7,6 @@ import desktoppet.ui.Window;
 
 import java.awt.Graphics;
 import java.awt.Image;
-import java.util.Date;
 
 import javax.swing.*;
 
