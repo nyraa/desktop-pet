@@ -1,6 +1,7 @@
 package desktoppet.animals.Cat;
 
 import desktoppet.control.State;
+import desktoppet.control.World;
 import desktoppet.model.Animal;
 import desktoppet.ui.Window;
 
@@ -57,7 +58,11 @@ public class Cat extends Animal
             System.out.println("Error: "+e);
         }
     }
-
+    public static void entry(World world)
+    {
+        Cat cat = new Cat(100, 100, 100, 100);
+        world.addAnimal(cat);
+    }
     
 
     @Override
