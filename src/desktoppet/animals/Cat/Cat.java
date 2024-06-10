@@ -17,8 +17,8 @@ public class Cat extends Animal
         SCRATCH
     };
     private ActionState actionState = ActionState.WALK;
-    private double directionX = 1;
-    private double directionY = -1;
+    public double directionX = 1;
+    public double directionY = -1;
     private static final double changeThreshold = 0.995;
     private static final double clawThreshold = 0.998;
     private static final int speed = 1;
@@ -38,17 +38,17 @@ public class Cat extends Animal
         try{
             //read in image and resize
             walk_right = new ImageIcon(getClass().getResource("/res/desktoppet/animals/Cat/right_150.gif"));
-            walk_right.setImage(walk_right.getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT)); //resize the image
+            walk_right.setImage(walk_right.getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT)); //resize the image
             walk_left = new ImageIcon(getClass().getResource("/res/desktoppet/animals/Cat/left_150.gif"));
-            walk_left.setImage(walk_left.getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
+            walk_left.setImage(walk_left.getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT));
             play_left = new ImageIcon(getClass().getResource("/res/desktoppet/animals/Cat/left_play_.gif"));
-            play_left.setImage(play_left.getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
+            play_left.setImage(play_left.getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT));
             play_right = new ImageIcon(getClass().getResource("/res/desktoppet/animals/Cat/right_play_.gif"));
-            play_right.setImage(play_right.getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
+            play_right.setImage(play_right.getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT));
             scratch_gif = new ImageIcon(getClass().getResource("/res/desktoppet/animals/Cat/scratch.gif"));
-            scratch_gif.setImage(scratch_gif.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT)); 
+            scratch_gif.setImage(scratch_gif.getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT)); 
             scratch_static = new ImageIcon(getClass().getResource("/res/desktoppet/animals/Cat/scratch.png"));
-            scratch_static.setImage(scratch_static.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT));
+            scratch_static.setImage(scratch_static.getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT));
 
             this.setIcon(walk_right);
         }catch(Exception e){
@@ -57,7 +57,7 @@ public class Cat extends Animal
     }
     public static void entry(World world)
     {
-        Cat cat = new Cat(100, 100, 100, 100);
+        Cat cat = new Cat(100, 100, 200, 200);
         world.addAnimal(cat);
     }
     
@@ -103,7 +103,7 @@ public class Cat extends Animal
             System.out.println("Scratching");
             scratchStartTime = System.currentTimeMillis();
             this.setIcon(scratch_gif);
-            ClawMark mark = new ClawMark(getX(), getY(), 100, 100, 8); //width, height, existTime
+            ClawMark mark = new ClawMark(getX(), getY(), 190, 190, 8); //width, height, existTime
             state.getWorldRef().addAnimal(mark);
             return;
         }

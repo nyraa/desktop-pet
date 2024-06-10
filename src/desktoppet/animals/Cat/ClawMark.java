@@ -20,7 +20,7 @@ public class ClawMark extends Animal
     {
         super(x, y, width, height);
         clawMark_gif = new ImageIcon(getClass().getResource("/res/desktoppet/animals/Cat/clawMark_noloop.gif"));
-        clawMark_gif.setImage(clawMark_gif.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT));
+        clawMark_gif.setImage(clawMark_gif.getImage().getScaledInstance(190, 190, Image.SCALE_DEFAULT));
         this.existTime = existTime;
         this.setIcon(clawMark_gif);
         createTime = System.currentTimeMillis();
