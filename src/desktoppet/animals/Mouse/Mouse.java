@@ -10,13 +10,13 @@ import java.awt.Image;
 import javax.swing.*;
 
 public class Mouse extends Animal{
-    double directionX = 1;
-    double directionY = -1;
-    static final double changeThreshold = 0.995;
-    static final int speed = 1;
+    private double directionX = 1;
+    private double directionY = -1;
+    private static final double changeThreshold = 0.995;
+    private static final int speed = 1;
 
-    ImageIcon walk_right = null;
-    ImageIcon walk_left = null;
+    private ImageIcon walk_right = null;
+    private ImageIcon walk_left = null;
 
     public Mouse(int x, int y, int width, int height)
     {
