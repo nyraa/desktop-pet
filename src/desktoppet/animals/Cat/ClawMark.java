@@ -10,9 +10,9 @@ import desktoppet.model.Animal;
 
 public class ClawMark extends Animal
 {
-    ImageIcon clawMark_gif = null;
-    long createTime = 0;
-    int existTime = 0;
+    private ImageIcon clawMark_gif = null;
+    private long createTime = 0;
+    private int existTime = 0;
     private boolean deleteFlag = false;
     private boolean cleanFlag = false;
 
