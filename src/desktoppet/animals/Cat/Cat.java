@@ -14,24 +14,32 @@ public class Cat extends Animal
 {
     private enum ActionState
     {
-        WALK_LEFT,
-        WALK_RIGHT,
+        WALK,
         PLAY_LEFT,
         PLAY_RIGHT,
         SCRATCH, 
         CHASE,
         CATCH
     };
-    private ActionState actionState = ActionState.WALK_RIGHT;
-    private double directionX = 1;
-    private double directionY = -1;
+    private enum Direction
+    {
+        LEFT,
+        RIGHT
+    };
+    private Direction animateDirection = Direction.RIGHT;
+    private ActionState actionState = ActionState.WALK;
+    private double directionX = 1;  // cos(theta)
+    private double directionY = -1; // sin(theta)
     private static final double changeThreshold = 0.995;
     private static final double clawThreshold = 0.998;
     private static final int distanceThreshold = 300;
-    private int speed = 1;
+    private static final int walkingSpeed = 1;
+    private static final int runningSpeed = 2;
+    private int currentSpeed = 1;
     private long scratchStartTime = 0;
     private long catchStartTime = 0;
-    private double catToMouseDistance = 0;
+    private double catToMouseDistanceX = 0;
+    private double catToMouseDistanceY = 0;
 
     private ImageIcon walk_right = null;
     private ImageIcon walk_left = null;
@@ -92,163 +100,186 @@ public class Cat extends Animal
     @Override
     public void update(State state)
     {
-        // stall the cat for a while after scratching
+        changeState(state);
+        changeDirection(state);
+        walk();
+        changeIcon();
+    }
+
+    private void changeState(State state)
+    {
+        // stall part: scratch, play, catch
+        currentSpeed = walkingSpeed;
         if(actionState == ActionState.SCRATCH)
         {
-            if(System.currentTimeMillis() - scratchStartTime < 4000)
+            if(System.currentTimeMillis() - scratchStartTime < 3600)
             {
                 return;
             }
-            else
+        }
+        if(actionState == ActionState.CATCH)
+        {
+            if(System.currentTimeMillis() - catchStartTime < 2000)
             {
-                actionState = directionX>0?ActionState.WALK_RIGHT:ActionState.WALK_LEFT;
-                this.setIcon(directionX>0?walk_right:walk_left);
-                System.out.println("set icon to walking, line 82");
+                return;
             }
         }
-        int screenWidth = state.getScreenWidth();
-        int screenHeight = state.getScreenHeight();
 
-        //check if the cursor is on the cat
+        // if cursor on cat
         int mouseX = state.getMouseX();
         int mouseY = state.getMouseY();
-        if(mouseX>getX() && mouseX<getX()+getWidth()/2 && mouseY>getY() && mouseY<getY()+getHeight()){
-            if(actionState != ActionState.PLAY_LEFT){
-                this.setIcon(play_left);
-                actionState = ActionState.PLAY_LEFT;
-            } 
+        if(mouseX > getX() && mouseX < getX() + getWidth() / 2 && mouseY > getY() && mouseY < getY() + getHeight())
+        {
+            actionState = ActionState.PLAY_LEFT;
             return;
-        }else if(mouseX>getX()+getWidth()/2 && mouseX<getX()+getWidth() && mouseY>getY() && mouseY<getY()+getHeight()){
-            if(actionState != ActionState.PLAY_RIGHT){
-                this.setIcon(play_right);
-                actionState = ActionState.PLAY_RIGHT;
-            }
+        }
+        else if(mouseX >= getX() + getWidth() / 2 && mouseX < getX() + getWidth() && mouseY > getY() && mouseY < getY() + getHeight())
+        {
+            actionState = ActionState.PLAY_RIGHT;
             return;
-        }else{
-            //reset icon to walking ones if not currently walking
-            if(!(directionX>0 && actionState == ActionState.WALK_RIGHT) && 
-               !(directionX<0 && actionState == ActionState.WALK_LEFT)){
-                actionState = directionX>0?ActionState.WALK_RIGHT:ActionState.WALK_LEFT;
-                this.setIcon(directionX>0?walk_right:walk_left);
-            }
         }
 
+        // if mouse is near
+        Component[] components = state.getComponents();
+        for (Component component : components)
+        {
+            if(component instanceof Mouse)
+            {
+                Mouse mouse = (Mouse)component;
+                if(mouse.isVisible())
+                {
+                    double catToMouseDistance = Math.sqrt(Math.pow((mouse.getX() - this.getX()), 2) + Math.pow((mouse.getY() - this.getY()), 2));
+                    if(catToMouseDistance < distanceThreshold)
+                    {
+                        actionState = ActionState.CHASE;
+                        currentSpeed = runningSpeed;
+                        catToMouseDistanceX = mouse.getX() - this.getX();
+                        catToMouseDistanceY = mouse.getY() - this.getY();
+                        return;
+                    }
+                }
+            }
+        }
+        actionState = ActionState.WALK;
+    }
+    private void walk()
+    {
+        if(actionState == ActionState.WALK || actionState == ActionState.CHASE)
+        {
+            if(directionX > 0)
+            {
+                animateDirection = Direction.RIGHT;
+            }
+            else
+            {
+                animateDirection = Direction.LEFT;
+            }
+            setLocation((int)Math.ceil(getX() + currentSpeed * directionX), (int)Math.ceil(getY() + currentSpeed * directionY));
+        }
+    }
+
+    private void changeDirection(State state)
+    {
+        double random = Math.random();
+
+        // if cat is chasing mouse
+        if(actionState == ActionState.CHASE)
+        {
+            directionX = catToMouseDistanceX / Math.sqrt(Math.pow(catToMouseDistanceX, 2) + Math.pow(catToMouseDistanceY, 2));
+            directionY = catToMouseDistanceY / Math.sqrt(Math.pow(catToMouseDistanceX, 2) + Math.pow(catToMouseDistanceY, 2));
+            return;
+        }
         
-        double probability = Math.random();
-
-        //randomly scratch the screen
-        if(probability >= clawThreshold && actionState != ActionState.CHASE){
-            actionState = ActionState.SCRATCH;
-            System.out.println("Scratching");
-            scratchStartTime = System.currentTimeMillis();
-            World world = state.getWorldRef();
-
-            // delete this to let claw at top
-            world.deleteAnimal(this);
-            ClawMark mark = new ClawMark(getX(), getY(), 190, 190, 8); //width, height, existTime
-            world.addAnimal(mark);
-            // add this back under claw
-            world.addAnimal(this);
-
-            // reset icon to scratch
-            this.setIcon(scratch_gif);
+        // touch screen border
+        boolean touchBorder = false;
+        if(getX() < 0 || getX() > state.getScreenWidth() - getWidth())
+        {
+            directionX = -directionX;
+            touchBorder = true;
+        }
+        if(getY() < 0 || getY() > state.getScreenHeight() - getHeight())
+        {
+            directionY = -directionY;
+            touchBorder = true;
+        }
+        if(touchBorder)
+        {
             return;
         }
 
-        //randomly change the direction
-        if(probability >= changeThreshold){
-            double randX = Math.random();
-            double randY = Math.random();
-            directionX = (randX / Math.sqrt(randX*randX + randY*randY))*2;
-            directionY = (randY / Math.sqrt(randX*randX + randY*randY))*2;
-            if(directionX > 0 && actionState != ActionState.WALK_RIGHT){
-                this.setIcon(walk_right);
-                actionState = ActionState.WALK_RIGHT;
-                System.out.println("set icon to walk right");
+        // if change direction
+        if(random > changeThreshold)
+        {
+            // from -1 to 1
+            directionX = Math.random() * 2 - 1;
+            if(directionX == 0)
+            {
+                directionX = 1;
             }
-            else if(directionX < 0 && actionState != ActionState.WALK_LEFT){
-                this.setIcon(walk_left);
-                actionState = ActionState.WALK_LEFT;
-                System.out.println("set icon to walk left");
+            directionY = Math.random() * 2 - 1;
+            if(directionY == 0)
+            {
+                directionY = 1;
             }
-            System.out.println("Direction changed: "+directionX+" "+directionY);
+            return;
         }
+    }
 
-        //check if the cat hits the edge
-        if(getX() > screenWidth-this.getWidth() || getX() < 0 || getY() > screenHeight-this.getHeight() || getY() < 0){
-            directionX = -directionX;
-            directionY = -directionY;
-            this.setIcon(directionX>0?walk_right:walk_left);
-            actionState = directionX>0?ActionState.WALK_RIGHT:ActionState.WALK_LEFT;
-            System.out.println("hit edge, Direction changed: "+directionX+" "+directionY);
+    @Override
+    public void setIcon(Icon icon)
+    {
+        if(getIcon() != icon)
+        {
+            super.setIcon(icon);
         }
+    }
 
-        checkMouseChaseByCat(state.getComponents());
-
-        //move the instance
-        setLocation(getX() + speed*(int)directionX, getY()+ speed*(int)directionY);
-
+    private void changeIcon()
+    {
+        switch(actionState)
+        {
+            case WALK:
+                if(animateDirection == Direction.RIGHT)
+                {
+                    setIcon(walk_right);
+                }
+                else
+                {
+                    setIcon(walk_left);
+                }
+                break;
+            case PLAY_LEFT:
+                setIcon(play_left);
+                break;
+            case PLAY_RIGHT:
+                setIcon(play_right);
+                break;
+            case SCRATCH:
+                setIcon(scratch_gif);
+                break;
+            case CHASE:
+                if(animateDirection == Direction.RIGHT)
+                {
+                    setIcon(run_right);
+                }
+                else
+                {
+                    setIcon(run_left);
+                }
+                break;
+            case CATCH:
+                if(animateDirection == Direction.RIGHT)
+                {
+                    setIcon(catched_right);
+                }
+                else
+                {
+                    setIcon(catched_left);
+                }
+                break;
+        }
     }
         
     @Override
     public void paintContent(Graphics g){}
-    
-    //determine chasing relative actions, including chasing and catching
-    public void checkMouseChaseByCat(Component[] components){
-        if(actionState == ActionState.CATCH){
-            //recover the cat after catching the mouse for 2 seconds
-            if(System.currentTimeMillis() - catchStartTime > 2000){
-                actionState = directionX>0?ActionState.WALK_RIGHT:ActionState.WALK_LEFT;
-                this.setIcon(directionX>0?walk_right:walk_left);
-            }else{
-                return;
-            }
-        }else{ 
-            //check the relative position of the mouse and the cat
-            for (Component component : components)
-            {
-                if(component instanceof Mouse)
-                {
-                    Mouse mouse = (Mouse)component;
-                    catToMouseDistance = Math.sqrt(Math.pow((mouse.getX() - this.getX()), 2) + Math.pow((mouse.getY() - this.getY()), 2));
-                    //check every frame if the mouse is being CHASED by the cat
-                    if(mouse.isVisible() == true && catToMouseDistance < distanceThreshold)
-                    {
-                        System.out.println("Chasing mouse");
-                        directionX = (mouse.getX() - this.getX()) / (0.5*catToMouseDistance);
-                        directionY = (mouse.getY() - this.getY()) / (0.5*catToMouseDistance);
-                        if(actionState != ActionState.CHASE){
-                            this.setIcon(directionX > 0?run_right:run_left);
-                            actionState = ActionState.CHASE;
-                            speed = 2;
-                        }
-                    }else if(mouse.isVisible() == false || catToMouseDistance > distanceThreshold){
-                        //change from chasing to walking
-                        if(actionState == ActionState.CHASE || speed == 2){
-                            this.setIcon(directionX>0?walk_right:walk_left);
-                            System.out.println("Stop chasing");
-                            actionState = directionX>0?ActionState.WALK_RIGHT:ActionState.WALK_LEFT;
-                            speed = 1;
-                        }
-                    }
-
-                    //check if the mouse is CAUGHT by the cat
-                    if(mouse.isVisible() == true && 
-                    this.getX() < mouse.getX() + mouse.getWidth()/2 && 
-                    this.getX() + this.getWidth()/2 > mouse.getX() && 
-                    this.getY() < mouse.getY() + mouse.getHeight()/2 && 
-                    this.getY() + this.getHeight()/2 > mouse.getY() &&
-                    actionState != ActionState.CATCH)
-                    {
-                        System.out.println("Mouse caught by cat");
-                        actionState = ActionState.CATCH;
-                        catchStartTime = System.currentTimeMillis();
-                        this.setIcon(directionX>0?catched_right:catched_left);
-                    }
-                    return;
-                }
-            }
-            System.out.println("No mouse found");
-        }
-    }
 }

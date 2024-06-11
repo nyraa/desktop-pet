@@ -99,7 +99,7 @@ public class Mouse extends Animal{
                     directionY = cat.getDirectionY();
                     this.setIcon(directionX > 0?run_right:run_left);
                 }
-                else if(this.setVisible == true && catToMouseDistance > distanceThreshold){
+                else if(this.setVisibleFlag == true && catToMouseDistance > distanceThreshold){
                     beingChased = false;
                     this.setIcon(directionX > 0?walk_right:walk_left);
                 }
