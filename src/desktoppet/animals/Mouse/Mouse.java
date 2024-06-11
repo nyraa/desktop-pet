@@ -19,8 +19,8 @@ public class Mouse extends Animal{
     private static final int distanceThreshold = 300;
     private double catToDogDistance = 0;
     private static final int walkingSpeed = 1;
-    private static final int runningSpeed = 3;
-    private int currentSpeed = walkingSpeed;
+    private double runningSpeed = 3;
+    private double currentSpeed = walkingSpeed;
 
     private ImageIcon walk_right = null;
     private ImageIcon walk_left = null;
@@ -45,6 +45,22 @@ public class Mouse extends Animal{
             run_right.setImage(run_right.getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
             run_left = new ImageIcon(getClass().getResource("/res/desktoppet/animals/Mouse/mouse_run_left.gif"));
             run_left.setImage(run_left.getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
+
+            //randomly set running speed
+            double probability = Math.random();
+            if(probability > 0.8){
+                runningSpeed = 3;
+            }
+            else if(probability > 0.6){
+                runningSpeed = 2;
+            }
+            else if (probability > 0.4){
+                runningSpeed = 1.5;
+            }
+            else{
+                runningSpeed = 1.3;
+            }
+            System.out.println("Mouse running speed: "+runningSpeed);
 
             this.setIcon(walk_right);
         }catch(Exception e){
@@ -92,6 +108,12 @@ public class Mouse extends Animal{
                     else{
                         directionX = -1;
                     }
+                    if(cat.getDirectionY() > 0){
+                        directionY = 1;
+                    }
+                    else{
+                        directionY = -1;
+                    }
                 }
 
                 //check if the mouse is caught by the cat
@@ -100,6 +122,7 @@ public class Mouse extends Animal{
                     System.out.println("Mouse caught by cat");
                     //beingCaught = true;
                     setVisible = false;
+                    beingChased = false;
                 }
             }
         }
@@ -117,6 +140,21 @@ public class Mouse extends Animal{
                 else{
                     this.setIcon(walk_left);
                 }
+                //randomly set running speed
+                double probability = Math.random();
+                if(probability > 0.8){
+                    runningSpeed = 3;
+                }
+                else if(probability > 0.6){
+                    runningSpeed = 2;
+                }
+                else if (probability > 0.3){
+                    runningSpeed = 1.5;
+                }
+                else{
+                    runningSpeed = 1.3;
+                }
+                System.out.println("Mouse running speed: "+runningSpeed);
                 System.out.println("Mouse generated");
             }
         }
@@ -148,6 +186,7 @@ public class Mouse extends Animal{
             }
             System.out.println("Direction changed: "+directionX+" "+directionY);
         }
+        
 
         //check if the mouse hits the edge
         if(getX() > screenWidth-this.getWidth() || getX() < 0 || getY() > screenHeight-this.getHeight() || getY() < 0){
@@ -159,7 +198,12 @@ public class Mouse extends Animal{
             directionX = -directionX;
             directionY = -directionY;
             currentSpeed = runningSpeed;
-            this.setIcon(directionX>0?walk_right:walk_left);
+            if(beingChased){
+                this.setIcon(directionX>0?run_right:run_left);
+            }
+            else{
+                this.setIcon(directionX>0?walk_right:walk_left);
+            }
             System.out.println("hit edge, Direction changed: "+directionX+" "+directionY);
         }
         else{
@@ -173,7 +217,7 @@ public class Mouse extends Animal{
 
         //move the instance
         
-        setLocation(getX() + currentSpeed*(int)directionX, getY()+ currentSpeed*(int)directionY);
+        setLocation(getX() + (int)(currentSpeed*(int)directionX), getY()+ (int)(currentSpeed*(int)directionY));
 
 
     }
