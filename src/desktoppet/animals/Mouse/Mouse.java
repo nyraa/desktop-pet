@@ -29,7 +29,7 @@ public class Mouse extends Animal{
 
     //private boolean beingCaught = false;
     private boolean beingChased = false;
-    private boolean setVisible = true;
+    private boolean setVisibleFlag = true;
 
     public Mouse(int x, int y, int width, int height)
     {
@@ -90,7 +90,7 @@ public class Mouse extends Animal{
                 catToMouseDistance = Math.sqrt(Math.pow((cat.getX() - this.getX()), 2) + Math.pow((cat.getY() - this.getY()), 2));
 
                 //check if the mouse is being chased by the cat
-                if(this.setVisible == true && catToMouseDistance < distanceThreshold)
+                if(this.setVisibleFlag == true && catToMouseDistance < distanceThreshold)
                 {
                     System.out.println("Mouse being chased by cat");
                     beingChased = true;
@@ -103,7 +103,7 @@ public class Mouse extends Animal{
                 {
                     System.out.println("Mouse caught by cat");
                     //beingCaught = true;
-                    setVisible = false;
+                    setVisibleFlag = false;
                     beingChased = false;
                 }
             }
@@ -115,7 +115,7 @@ public class Mouse extends Animal{
             if(visibleProbability > mouseGenerateProbability){
                 //beingCaught = false;
                 beingChased = false;
-                setVisible = true;
+                setVisibleFlag = true;
                 if(directionX > 0){
                     this.setIcon(walk_right);
                 }
@@ -142,7 +142,7 @@ public class Mouse extends Animal{
         }
 
         //set visible or not
-        if(setVisible){
+        if(setVisibleFlag){
             this.setVisible(true);
         }
         else{
@@ -174,7 +174,7 @@ public class Mouse extends Animal{
         if(getX() > screenWidth-this.getWidth() || getX() < 0 || getY() > screenHeight-this.getHeight() || getY() < 0){
             if(beingChased){
                 //beingChased = false;
-                setVisible = false;
+                setVisibleFlag = false;
                 this.setVisible(false);
             }
             directionX = -directionX;
