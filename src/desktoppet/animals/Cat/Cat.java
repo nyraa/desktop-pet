@@ -34,7 +34,7 @@ public class Cat extends Animal
     private double y = 0;           // y coordinate
     private static final double changeThreshold = 0.995;
     private static final double clawThreshold = 0.998;
-    private static final int distanceThreshold = 1000;
+    private static final int distanceThreshold = 300;
     private static final int catchThreshold = 30;
     private static final int walkingSpeed = 1;
     private static final int runningSpeed = 2;
@@ -57,8 +57,8 @@ public class Cat extends Animal
     public Cat(int x, int y, int width, int height)
     {
         super(x, y, width, height);
-        x = x;
-        x = y;
+        this.x = x;
+        this.x = y;
         System.out.println("Cat created");
         try{
             //read in image and resize
