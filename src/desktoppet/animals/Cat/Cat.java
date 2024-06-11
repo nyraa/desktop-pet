@@ -34,7 +34,8 @@ public class Cat extends Animal
     private double y = 0;           // y coordinate
     private static final double changeThreshold = 0.995;
     private static final double clawThreshold = 0.998;
-    private static final int distanceThreshold = 300;
+    private static final int distanceThreshold = 1000;
+    private static final int catchThreshold = 50;
     private static final int walkingSpeed = 1;
     private static final int runningSpeed = 2;
     private int currentSpeed = 1;
@@ -153,6 +154,14 @@ public class Cat extends Animal
                 if(mouse.isVisible())
                 {
                     double catToMouseDistance = Math.sqrt(Math.pow((mouse.getX() - this.getX()), 2) + Math.pow((mouse.getY() - this.getY()), 2));
+                    if(catToMouseDistance < catchThreshold)
+                    {
+                        actionState = ActionState.CATCH;
+                        catchStartTime = System.currentTimeMillis();
+                        mouse.caught();
+                        System.out.println("Cat caught mouse");
+                        return;
+                    }
                     if(catToMouseDistance < distanceThreshold)
                     {
                         actionState = ActionState.CHASE;

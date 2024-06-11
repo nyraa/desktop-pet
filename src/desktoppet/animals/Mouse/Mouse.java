@@ -105,13 +105,13 @@ public class Mouse extends Animal{
                 }
 
                 //check if the mouse is caught by the cat
-                if(this.isVisible() == true && cat.getX() < this.getX() + this.getWidth()/2 && cat.getX() + cat.getWidth()/2 > this.getX() && cat.getY() < this.getY() + this.getHeight()/2 && cat.getY() + cat.getHeight()/2 > this.getY())
-                {
-                    System.out.println("Mouse caught by cat");
-                    //beingCaught = true;
-                    setVisibleFlag = false;
-                    beingChased = false;
-                }
+                // if(this.isVisible() == true && cat.getX() < this.getX() + this.getWidth()/2 && cat.getX() + cat.getWidth()/2 > this.getX() && cat.getY() < this.getY() + this.getHeight()/2 && cat.getY() + cat.getHeight()/2 > this.getY())
+                // {
+                //     System.out.println("Mouse caught by cat");
+                //     //beingCaught = true;
+                //     setVisibleFlag = false;
+                //     beingChased = false;
+                // }
             }
         }
 
@@ -145,17 +145,6 @@ public class Mouse extends Animal{
                 System.out.println("Mouse running speed: "+runningSpeed);
                 System.out.println("Mouse generated");
             }
-        }
-
-        //set visible or not
-        if(setVisibleFlag){
-            this.setVisible(true);
-        }
-        else{
-            this.setVisible(false);
-            this.repaint();
-            this.setIcon(null);
-            //System.out.println("Mouse hidden");
         }
 
         //randomly change the direction
@@ -208,6 +197,13 @@ public class Mouse extends Animal{
         setLocation(getX() + (int)(currentSpeed*(int)directionX), getY()+ (int)(currentSpeed*(int)directionY));
 
 
+    }
+
+    public void caught()
+    {
+        this.setVisible(false);
+        this.setIcon(null);
+        beingChased = false;
     }
         
     @Override
