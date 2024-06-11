@@ -29,7 +29,6 @@ public class Mouse extends Animal{
 
     //private boolean beingCaught = false;
     private boolean beingChased = false;
-    private boolean setVisibleFlag = true;
 
     public Mouse(int x, int y, int width, int height)
     {
@@ -90,7 +89,7 @@ public class Mouse extends Animal{
                 catToMouseDistance = Math.sqrt(Math.pow((cat.getX() - this.getX()), 2) + Math.pow((cat.getY() - this.getY()), 2));
 
                 //check if the mouse is being chased by the cat
-                if(this.setVisibleFlag == true && catToMouseDistance < distanceThreshold)
+                if(this.isVisible() == true && catToMouseDistance < distanceThreshold)
                 {
                     System.out.println("Mouse being chased by cat");
                     beingChased = true;
@@ -99,19 +98,10 @@ public class Mouse extends Animal{
                     directionY = cat.getDirectionY();
                     this.setIcon(directionX > 0?run_right:run_left);
                 }
-                else if(this.setVisibleFlag == true && catToMouseDistance > distanceThreshold){
+                else if(this.isVisible() == true && catToMouseDistance > distanceThreshold){
                     beingChased = false;
                     this.setIcon(directionX > 0?walk_right:walk_left);
                 }
-
-                //check if the mouse is caught by the cat
-                // if(this.isVisible() == true && cat.getX() < this.getX() + this.getWidth()/2 && cat.getX() + cat.getWidth()/2 > this.getX() && cat.getY() < this.getY() + this.getHeight()/2 && cat.getY() + cat.getHeight()/2 > this.getY())
-                // {
-                //     System.out.println("Mouse caught by cat");
-                //     //beingCaught = true;
-                //     setVisibleFlag = false;
-                //     beingChased = false;
-                // }
             }
         }
 
@@ -121,7 +111,7 @@ public class Mouse extends Animal{
             if(visibleProbability > mouseGenerateProbability){
                 //beingCaught = false;
                 beingChased = false;
-                setVisibleFlag = true;
+                this.setVisible(true);
                 if(directionX > 0){
                     this.setIcon(walk_right);
                 }
@@ -168,8 +158,6 @@ public class Mouse extends Animal{
         //check if the mouse hits the edge
         if(getX() > screenWidth-this.getWidth() || getX() < 0 || getY() > screenHeight-this.getHeight() || getY() < 0){
             if(beingChased){
-                //beingChased = false;
-                setVisibleFlag = false;
                 this.setVisible(false);
             }
             directionX = -directionX;
