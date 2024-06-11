@@ -17,7 +17,7 @@ public class Mouse extends Animal{
     private double x = 0;
     private double y = 0;
     private static final double changeThreshold = 0.995;
-    private static final double mouseRespawnProbability = 0;
+    private static final double mouseRespawnProbability = 0.999;
     private static final int distanceThreshold = 300;
     private static final int walkingSpeed = 1;
     private double runningSpeed = walkingSpeed;
