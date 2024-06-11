@@ -227,17 +227,10 @@ public class Cat extends Animal
         if(random > changeThreshold)
         {
             // from -1 to 1
-            directionX = Math.random() * 2 - 1;
-            if(directionX == 0)
-            {
-                directionX = 1;
-            }
-            directionY = Math.random() * 2 - 1;
-            if(directionY == 0)
-            {
-                directionY = 1;
-            }
-            System.err.println("cat Direction changed: "+directionX+" "+directionY);
+            int deg = (int)(Math.random() * 360);
+            directionX = Math.cos(Math.toRadians(deg));
+            directionY = Math.sin(Math.toRadians(deg));
+            System.out.println("cat Direction changed: "+directionX+" "+directionY);
             return;
         }
     }
