@@ -35,7 +35,7 @@ public class Cat extends Animal
     private static final double changeThreshold = 0.995;
     private static final double clawThreshold = 0.998;
     private static final int distanceThreshold = 1000;
-    private static final int catchThreshold = 50;
+    private static final int catchThreshold = 30;
     private static final int walkingSpeed = 1;
     private static final int runningSpeed = 2;
     private int currentSpeed = 1;
@@ -146,6 +146,8 @@ public class Cat extends Animal
 
         // if mouse is near
         Component[] components = state.getComponents();
+        int centerX = getX() + getWidth() / 2;
+        int centerY = getY() + getHeight() / 2;
         for (Component component : components)
         {
             if(component instanceof Mouse)
@@ -153,7 +155,7 @@ public class Cat extends Animal
                 Mouse mouse = (Mouse)component;
                 if(mouse.isVisible())
                 {
-                    double catToMouseDistance = Math.sqrt(Math.pow((mouse.getX() - this.getX()), 2) + Math.pow((mouse.getY() - this.getY()), 2));
+                    double catToMouseDistance = Math.sqrt(Math.pow((mouse.getX() - centerX), 2) + Math.pow((mouse.getY() - centerY), 2));
                     if(catToMouseDistance < catchThreshold)
                     {
                         actionState = ActionState.CATCH;
@@ -166,8 +168,8 @@ public class Cat extends Animal
                     {
                         actionState = ActionState.CHASE;
                         currentSpeed = runningSpeed;
-                        catToMouseDistanceX = mouse.getX() - this.getX();
-                        catToMouseDistanceY = mouse.getY() - this.getY();
+                        catToMouseDistanceX = mouse.getX() - centerX;
+                        catToMouseDistanceY = mouse.getY() - centerY;
                         return;
                     }
                 }
