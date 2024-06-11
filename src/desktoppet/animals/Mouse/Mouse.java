@@ -19,7 +19,8 @@ public class Mouse extends Animal{
     private static final int distanceThreshold = 300;
     private double catToDogDistance = 0;
     private static final int walkingSpeed = 1;
-    private int runningSpeed = 3;
+    private static final int runningSpeed = 3;
+    private int currentSpeed = walkingSpeed;
 
     private ImageIcon walk_right = null;
     private ImageIcon walk_left = null;
@@ -157,18 +158,22 @@ public class Mouse extends Animal{
             }
             directionX = -directionX;
             directionY = -directionY;
+            currentSpeed = runningSpeed;
             this.setIcon(directionX>0?walk_right:walk_left);
             System.out.println("hit edge, Direction changed: "+directionX+" "+directionY);
         }
+        else{
+            if(beingChased){
+                currentSpeed = runningSpeed;
+            }
+            else{
+                currentSpeed = walkingSpeed;
+            }
+        }
 
         //move the instance
-        if(beingChased){
-            setLocation(getX() + runningSpeed*(int)directionX, getY()+ runningSpeed*(int)directionY);
-            //System.out.println("Mouse running");
-        }
-        else{
-            setLocation(getX() + walkingSpeed*(int)directionX, getY()+ walkingSpeed*(int)directionY);
-        }
+        
+        setLocation(getX() + currentSpeed*(int)directionX, getY()+ currentSpeed*(int)directionY);
 
 
     }
