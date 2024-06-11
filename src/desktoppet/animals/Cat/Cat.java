@@ -164,6 +164,14 @@ public class Cat extends Animal
                 }
             }
         }
+
+        // scratch
+        if(Math.random() > clawThreshold)
+        {
+            actionState = ActionState.SCRATCH;
+            scratchStartTime = System.currentTimeMillis();
+            return;
+        }
         actionState = ActionState.WALK;
     }
     private void walk()
