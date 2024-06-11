@@ -23,8 +23,8 @@ public class Cat extends Animal
         CATCH
     };
     private ActionState actionState = ActionState.WALK_RIGHT;
-    public double directionX = 1;
-    public double directionY = -1;
+    private double directionX = 1;
+    private double directionY = -1;
     private static final double changeThreshold = 0.995;
     private static final double clawThreshold = 0.998;
     private static final int distanceThreshold = 300;
@@ -80,6 +80,15 @@ public class Cat extends Animal
         world.addAnimal(cat);
     }
     
+    public double getDirectionX()
+    {
+        return directionX;
+    }
+    public double getDirectionY()
+    {
+        return directionY;
+    }
+
 
     @Override
     public void update(State state)
@@ -133,9 +142,17 @@ public class Cat extends Animal
             actionState = ActionState.SCRATCH;
             System.out.println("Scratching");
             scratchStartTime = System.currentTimeMillis();
-            this.setIcon(scratch_gif);
+            World world = state.getWorldRef();
+
+            // delete this to let claw at top
+            world.deleteAnimal(this);
             ClawMark mark = new ClawMark(getX(), getY(), 190, 190, 8); //width, height, existTime
-            state.getWorldRef().addAnimal(mark);
+            world.addAnimal(mark);
+            // add this back under claw
+            world.addAnimal(this);
+
+            // reset icon to scratch
+            this.setIcon(scratch_gif);
             return;
         }
 
