@@ -40,7 +40,6 @@ public class Cat extends Animal
     private ImageIcon play_left = null;
     private ImageIcon play_right = null;
     private ImageIcon scratch_gif = null;
-    private ImageIcon scratch_static = null;
     private ImageIcon catched_left = null;
     private ImageIcon catched_right = null;
 
