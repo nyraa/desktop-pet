@@ -30,6 +30,8 @@ public class Cat extends Animal
     private ActionState actionState = ActionState.WALK;
     private double directionX = 1;  // cos(theta)
     private double directionY = -1; // sin(theta)
+    private double x = 0;           // x coordinate
+    private double y = 0;           // y coordinate
     private static final double changeThreshold = 0.995;
     private static final double clawThreshold = 0.998;
     private static final int distanceThreshold = 300;
@@ -54,6 +56,8 @@ public class Cat extends Animal
     public Cat(int x, int y, int width, int height)
     {
         super(x, y, width, height);
+        x = x;
+        x = y;
         System.out.println("Cat created");
         try{
             //read in image and resize
@@ -174,7 +178,9 @@ public class Cat extends Animal
             {
                 animateDirection = Direction.LEFT;
             }
-            setLocation((int)Math.ceil(getX() + currentSpeed * directionX), (int)Math.ceil(getY() + currentSpeed * directionY));
+            x += currentSpeed * directionX;
+            y += currentSpeed * directionY;
+            setLocation((int)x, (int)y);
         }
     }
 
@@ -192,14 +198,24 @@ public class Cat extends Animal
         
         // touch screen border
         boolean touchBorder = false;
-        if(getX() < 0 || getX() > state.getScreenWidth() - getWidth())
+        if(getX() < 0)
         {
-            directionX = -directionX;
+            directionX = Math.abs(directionX);
             touchBorder = true;
         }
-        if(getY() < 0 || getY() > state.getScreenHeight() - getHeight())
+        if(getX() + getWidth() > state.getScreenWidth())
         {
-            directionY = -directionY;
+            directionX = -Math.abs(directionX);
+            touchBorder = true;
+        }
+        if(getY() < 0)
+        {
+            directionY = Math.abs(directionY);
+            touchBorder = true;
+        }
+        if(getY() + getHeight() > state.getScreenHeight())
+        {
+            directionY = -Math.abs(directionY);
             touchBorder = true;
         }
         if(touchBorder)
@@ -221,6 +237,7 @@ public class Cat extends Animal
             {
                 directionY = 1;
             }
+            System.err.println("cat Direction changed: "+directionX+" "+directionY);
             return;
         }
     }
