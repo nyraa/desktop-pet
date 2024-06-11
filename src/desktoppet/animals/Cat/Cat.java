@@ -111,9 +111,17 @@ public class Cat extends Animal
             actionState = ActionState.SCRATCH;
             System.out.println("Scratching");
             scratchStartTime = System.currentTimeMillis();
-            this.setIcon(scratch_gif);
+            World world = state.getWorldRef();
+
+            // delete this to let claw at top
+            world.deleteAnimal(this);
             ClawMark mark = new ClawMark(getX(), getY(), 190, 190, 8); //width, height, existTime
-            state.getWorldRef().addAnimal(mark);
+            world.addAnimal(mark);
+            // add this back under claw
+            world.addAnimal(this);
+
+            // reset icon to scratch
+            this.setIcon(scratch_gif);
             return;
         }
 
