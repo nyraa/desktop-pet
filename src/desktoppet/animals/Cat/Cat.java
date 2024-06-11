@@ -170,6 +170,14 @@ public class Cat extends Animal
         {
             actionState = ActionState.SCRATCH;
             scratchStartTime = System.currentTimeMillis();
+            // add claw mark
+            ClawMark clawMark = new ClawMark(getX(), getY(), 190, 190, 10);
+            World world = state.getWorldRef();
+            // delete self
+            world.deleteAnimal(this);
+            world.addAnimal(clawMark);
+            // let claw at top
+            world.addAnimal(this);
             return;
         }
         actionState = ActionState.WALK;
