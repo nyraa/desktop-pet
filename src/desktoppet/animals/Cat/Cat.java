@@ -17,8 +17,8 @@ public class Cat extends Animal
         SCRATCH
     };
     private ActionState actionState = ActionState.WALK;
-    public double directionX = 1;
-    public double directionY = -1;
+    private double directionX = 1;
+    private double directionY = -1;
     private static final double changeThreshold = 0.995;
     private static final double clawThreshold = 0.998;
     private static final int speed = 1;
@@ -61,6 +61,15 @@ public class Cat extends Animal
         world.addAnimal(cat);
     }
     
+    public double getDirectionX()
+    {
+        return directionX;
+    }
+    public double getDirectionY()
+    {
+        return directionY;
+    }
+
 
     @Override
     public void update(State state)

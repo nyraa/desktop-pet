@@ -85,7 +85,7 @@ public class Mouse extends Animal{
                         this.setIcon(run_left);
                     }
 
-                    if(cat.directionX > 0){
+                    if(cat.getDirectionX() > 0){
                         directionX = 1;
                     }
                     else{
