@@ -95,7 +95,7 @@ public class Mouse extends Animal{
                     System.out.println("Mouse being chased by cat");
                     beingChased = true;
                     this.setIcon(directionX > 0?run_right:run_left);
-                    directionX = cat.directionX > 0 ? 1: -1;
+                    directionX = cat.getDirectionX() > 0 ? 1: -1;
                 }
 
                 //check if the mouse is caught by the cat
