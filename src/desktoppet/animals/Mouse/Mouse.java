@@ -17,7 +17,7 @@ public class Mouse extends Animal{
     private static final double changeThreshold = 0.995;
     private static final double mouseGenerateProbability = 0.999;
     private static final int distanceThreshold = 300;
-    private double catToDogDistance = 0;
+    private double catToMouseDistance = 0;
     private static final int walkingSpeed = 1;
     private int runningSpeed = 3;
 
@@ -54,7 +54,7 @@ public class Mouse extends Animal{
 
     public static void entry(World world)
     {
-        Mouse mouse = new Mouse(300, 300, 80, 80);
+        Mouse mouse = new Mouse(500, 500, 80, 80);
         world.addAnimal(mouse);
     }
 
@@ -70,27 +70,15 @@ public class Mouse extends Animal{
             if(component instanceof Cat)
             {
                 Cat cat = (Cat)component;
-                catToDogDistance = Math.sqrt(Math.pow((cat.getX() - this.getX()), 2) + Math.pow((cat.getY() - this.getY()), 2));
+                catToMouseDistance = Math.sqrt(Math.pow((cat.getX() - this.getX()), 2) + Math.pow((cat.getY() - this.getY()), 2));
 
                 //check if the mouse is being chased by the cat
-                if(this.setVisible == true && catToDogDistance < distanceThreshold)
+                if(this.setVisible == true && catToMouseDistance < distanceThreshold)
                 {
                     System.out.println("Mouse being chased by cat");
                     beingChased = true;
-
-                    if(directionX > 0){
-                        this.setIcon(run_right);
-                    }
-                    else{
-                        this.setIcon(run_left);
-                    }
-
-                    if(cat.directionX > 0){
-                        directionX = 1;
-                    }
-                    else{
-                        directionX = -1;
-                    }
+                    this.setIcon(directionX > 0?run_right:run_left);
+                    directionX = cat.directionX > 0 ? 1: -1;
                 }
 
                 //check if the mouse is caught by the cat
@@ -104,7 +92,7 @@ public class Mouse extends Animal{
         }
 
         //has been disappeared for a while, generate a new mouse
-        if(this.isVisible() == false && catToDogDistance > distanceThreshold){  
+        if(this.isVisible() == false && catToMouseDistance > distanceThreshold){  
             double visibleProbability = Math.random();
             if(visibleProbability > mouseGenerateProbability){
                 //beingCaught = false;
