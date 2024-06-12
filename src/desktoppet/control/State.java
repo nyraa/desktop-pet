@@ -51,6 +51,6 @@ public class State
     }
     public Component[] getComponents()
     {
-        return this.worldRef.getWindow().getContentPane().getComponents();
+        return this.worldRef.getComponents();
     }
 }

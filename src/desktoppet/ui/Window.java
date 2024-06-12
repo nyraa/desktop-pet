@@ -30,7 +30,6 @@ public class Window extends JFrame
 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
-        setLayout(null);
 
         // hook event when window is closed
         addWindowListener(new WindowAdapter()

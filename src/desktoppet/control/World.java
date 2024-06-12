@@ -5,11 +5,15 @@ import desktoppet.model.Animal;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.swing.JPanel;
+
 import java.awt.*;
 
 public class World
 {
     private Window window;
+    private JPanel panel;
     private Timer timer;
     private State state;
     private TimerTask updateTask = new TimerTask()
@@ -26,8 +30,7 @@ public class World
             state.setMouse(mousePosition.x, mousePosition.y);
 
             // update animals
-            Container contentPane = window.getContentPane();
-            Component[] components = contentPane.getComponents();
+            Component[] components = getComponents();
             for (Component component : components)
             {
                 if(component instanceof Animal)
@@ -41,6 +44,11 @@ public class World
     public World()
     {
         window = new Window(this);
+        panel = new JPanel();
+        panel.setLayout(null);
+        panel.setOpaque(false);
+        // panel.setBackground(new Color(0, 0, 0, 0));
+        window.add(panel, BorderLayout.CENTER);
         timer = new Timer();
         state = new State(this);
     }
@@ -56,14 +64,18 @@ public class World
     }
     public void addAnimal(Animal animal)
     {
-        window.add(animal);
+        panel.add(animal);
     }
     public void deleteAnimal(Animal animal)
     {
-        window.remove(animal);
+        panel.remove(animal);
     }
     public Window getWindow()
     {
         return window;
+    }
+    public Component[] getComponents()
+    {
+        return panel.getComponents();
     }
 }
