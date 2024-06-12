@@ -47,7 +47,6 @@ public class World
         panel = new JPanel();
         panel.setLayout(null);
         panel.setOpaque(false);
-        // panel.setBackground(new Color(0, 0, 0, 0));
         window.add(panel, BorderLayout.CENTER);
         timer = new Timer();
         state = new State(this);
